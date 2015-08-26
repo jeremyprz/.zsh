@@ -16,6 +16,8 @@ export HOSTNAME=`hostname -s`
 
 autoload -U promptinit
 promptinit
+setopt inc_append_history
+setopt share_history
 
 function collapse_pwd {
     echo $(pwd | sed -e "s,^$HOME,~,")
