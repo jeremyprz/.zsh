@@ -4,6 +4,6 @@ pushd .
 cd ~
 files=(`ls -a ~/.zsh/ | grep .zsh`)    
 for file in $files; do 
-  [ ! -e "~/$file" ] && ln -s "~/.zsh/$file"
+  [ ! -e "$HOME/$file" ] && ln -s $HOME/.zsh/$file
 done
 popd
