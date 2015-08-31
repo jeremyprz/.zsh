@@ -14,8 +14,7 @@ source $ZSH/oh-my-zsh.sh
 [ -d ~/dev/sandbox ] && cd ~/dev/sandbox
 export HOSTNAME=`hostname -s`
 
-[ -f ~/.zshlocal ] && . ~/.zshlocal
-[ -f ~/.zshaliases ] && source ~/.zshaliases
+[ -f ~/.zshrc-local ] && . ~/.zshrc-local
 
 # History
 setopt APPEND_HISTORY
