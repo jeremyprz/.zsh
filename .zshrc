@@ -14,10 +14,18 @@ source $ZSH/oh-my-zsh.sh
 [ -d ~/dev/sandbox ] && cd ~/dev/sandbox
 export HOSTNAME=`hostname -s`
 
+[ -f ~/.zshaliases ] && source ~/.zshaliases
+
+# History
+setopt APPEND_HISTORY
+## for sharing history between zsh processes
+#setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+export HISTSIZE=1000
+export SAVEHIST=1000
+
 autoload -U promptinit
 promptinit
-setopt inc_append_history
-setopt share_history
 
 function collapse_pwd {
     echo $(pwd | sed -e "s,^$HOME,~,")
