@@ -14,6 +14,7 @@ source $ZSH/oh-my-zsh.sh
 [ -d ~/dev/sandbox ] && cd ~/dev/sandbox
 export HOSTNAME=`hostname -s`
 
+[ -f ~/.zshlocal ] && . ~/.zshlocal
 [ -f ~/.zshaliases ] && source ~/.zshaliases
 
 # History
@@ -26,6 +27,8 @@ export SAVEHIST=1000
 
 autoload -U promptinit
 promptinit
+
+h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
 function collapse_pwd {
     echo $(pwd | sed -e "s,^$HOME,~,")
