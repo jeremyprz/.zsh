@@ -1,6 +1,8 @@
 #!/bin/zsh
 export HOSTNAME=`hostname -s`
 
+[ -f /apollo/env/envImprovement/var/zshrc ] && . /apollo/env/envImprovement/var/zshrc
+
 if [ -d $HOME/.oh-my-zsh ] && [ "$ZSH_THEME" != "vcs_info" ]; then
   [ -z "$ZSH_THEME" ] && ZSH_THEME="dstufft"
   ZSH=$HOME/.oh-my-zsh
