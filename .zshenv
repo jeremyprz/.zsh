@@ -8,3 +8,4 @@ fi
 
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"
 [ -d ~/man ] && MANPATH=~/man:"${MANPATH}"
+
