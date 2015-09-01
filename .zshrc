@@ -1,16 +1,15 @@
 #!/bin/zsh
-
+echo SOURCING .zshrc
 export HOSTNAME=`hostname -s`
 
 [ -f ~/.zshrc-local ] && . ~/.zshrc-local
 
 if [ -d $HOME/.oh-my-zsh ] && [ "$ZSH_THEME" != "vcs_info" ]; then
-  [ -z "$ZSH_THEME" ] && ZSH_THEME="random"
+  [ -z "$ZSH_THEME" ] && ZSH_THEME="dstufft"
   ZSH=$HOME/.oh-my-zsh
   # see: ~/.oh-my-zsh/plugins/*
   plugins=(git textmate)
   source $HOME/.oh-my-zsh/oh-my-zsh.sh
-  . ~/.zsh/.zsh-promptinit
 fi
 
 [ -d ~/dev/sandbox ] && cd ~/dev/sandbox
