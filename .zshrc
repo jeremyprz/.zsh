@@ -1,5 +1,4 @@
 #!/bin/zsh
-echo SOURCING .zshrc
 export HOSTNAME=`hostname -s`
 
 [ -f ~/.zshrc-local ] && . ~/.zshrc-local
