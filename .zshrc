@@ -1,5 +1,6 @@
 #!/bin/zsh
 export HOSTNAME=`hostname -s`
+export DISABLE_AUTO_UPDATE="true"
 
 [ -f /apollo/env/envImprovement/var/zshrc ] && . /apollo/env/envImprovement/var/zshrc
 
