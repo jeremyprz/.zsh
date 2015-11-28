@@ -17,12 +17,26 @@ umask 022
 if [ -d /Library/Java/JavaVirtualMachines ]; then
     export JDK_VERSION=`ls -a /Library/Java/JavaVirtualMachines | sort | tail -1`
     export JAVA_HOME=/Library/Java/JavaVirtualMachines/$JDK_VERSION/Contents/Home
+    export PATH=${JAVA_HOME}/bin:${PATH}
+    [ -f /bin/launchctl ] && /bin/launchctl setenv JAVA_HOME ${JAVA_HOME}
+fi
+
+if [ -d /opt/maven ]; then
+    export M2_HOME=/opt/maven
+    export PATH=${M2_HOME}/bin:${PATH}
+    [ -f /bin/launchctl ] && /bin/launchctl setenv M2_HOME ${M2_HOME}
+fi
+
+if [ -d /opt/gradle ]; then
+    export GRADLE_HOME=/opt/gradle
+    export PATH=${GRADLE_HOME}/bin:${PATH}
+    [ -f /bin/launchctl ] && /bin/launchctl setenv GRADLE_HOME ${GRADLE_HOME}
 fi
 
 # History
 setopt APPEND_HISTORY
 ## for sharing history between zsh processes
-#setopt INC_APPEND_HISTORY
+setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 export HISTSIZE=1000
 export SAVEHIST=1000
