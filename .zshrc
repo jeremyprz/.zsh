@@ -33,19 +33,10 @@ if [ -d /opt/gradle ]; then
     [ -f /bin/launchctl ] && /bin/launchctl setenv GRADLE_HOME ${GRADLE_HOME}
 fi
 
-# History
-setopt APPEND_HISTORY
-## for sharing history between zsh processes
-setopt INC_APPEND_HISTORY
-setopt SHARE_HISTORY
-export HISTSIZE=1000
-export SAVEHIST=1000
-
 h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
 
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"
 [ -d ~/man ] && MANPATH=~/man:"${MANPATH}"
-
 [ -d ~/dev/sandbox ] && cd ~/dev/sandbox
-
+[ -f ~/.zsh/.zsh-history ] && source ~/.zsh/.zsh-history
 [ -f ~/.zshlogin ] && source ~/.zshlogin

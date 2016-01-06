@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+# History
+setopt append_history
+## for sharing history between zsh processes
+setopt inc_append_history
+setopt share_history
+export HISTSIZE=1000
+export SAVEHIST=1000
