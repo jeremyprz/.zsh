@@ -7,3 +7,5 @@ setopt inc_append_history
 setopt share_history
 export HISTSIZE=1000
 export SAVEHIST=1000
+
+h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }

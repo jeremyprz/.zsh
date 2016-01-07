@@ -33,8 +33,6 @@ if [ -d /opt/gradle ]; then
     [ -f /bin/launchctl ] && /bin/launchctl setenv GRADLE_HOME ${GRADLE_HOME}
 fi
 
-h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
-
 [ -d ~/bin ] && PATH=~/bin:"${PATH}"
 [ -d ~/man ] && MANPATH=~/man:"${MANPATH}"
 [ -d ~/dev/sandbox ] && cd ~/dev/sandbox
