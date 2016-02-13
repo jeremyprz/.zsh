@@ -102,6 +102,6 @@ function put_spacing() {
 }
 
 PROMPT='
-$fg[cyan]$location $fg[yellow]$(get_pwd)$(put_spacing)$(git_prompt_info) $reset_color$(get_time)
+$fg[cyan]$location $fg[yellow]$(get_pwd)$(put_spacing)$(git_prompt_info) $fg[cyan]$(get_time)
 $reset_color$(prompt_char) '
 
