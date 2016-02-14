@@ -3,6 +3,5 @@
 TARGET=$1
 
 rsync -auv --progress ~/.zsh/ $TARGET:~/.zsh/
-ssh $TARGET '~/.zsh/bin/install-oh-my-zsh'
-ssh $TARGET '~/.zsh/bin/install-organl-zsh-theme'
+rsync -auv --progress ~/.oh-my-zsh/ $TARGET:~/.oh-my-zsh/
 ssh $TARGET '~/.zsh/bin/install-symlinks'
