@@ -2,10 +2,9 @@
 export HOSTNAME=`hostname -s`
 export DISABLE_AUTO_UPDATE="true"
 
-[ -f /apollo/env/envImprovement/var/zshrc ] && . /apollo/env/envImprovement/var/zshrc
 [ ! -f ~/.oh-my-zsh/custom/themes/organl.zsh-theme ] && ~/.zsh/bin/install-organl-zsh-theme
 
-if [ -d $HOME/.oh-my-zsh ] && [ "$ZSH_THEME" != "vcs_info" ]; then
+if [ -d $HOME/.oh-my-zsh ]; then
   [ -z "$ZSH_THEME" ] && ZSH_THEME="organl"
   ZSH=$HOME/.oh-my-zsh
   # see: ~/.oh-my-zsh/plugins/*
