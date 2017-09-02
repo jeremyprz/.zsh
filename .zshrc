@@ -21,6 +21,11 @@ if [ -d /Library/Java/JavaVirtualMachines ]; then
     [ -f /bin/launchctl ] && /bin/launchctl setenv JAVA_HOME ${JAVA_HOME}
 fi
 
+if [ -d ~/Library/Python/2.7/bin ]; then
+    export PYTHON_27_HOME=~/Library/Python/2.7
+    export PATH=${PATH}:$PYTHON_27_HOME/bin
+fi
+
 if [ -d /opt/maven ]; then
     export M2_HOME=/opt/maven
     export PATH=${M2_HOME}/bin:${PATH}
@@ -38,6 +43,7 @@ fi
 PATH=~/bin:"${PATH}"
 [ -d ~/man ] && MANPATH=~/man:"${MANPATH}"
 [ -d ~/dev/sandbox ] && cd ~/dev/sandbox
+[ -f ~/.env/init.zsh ] && source ~/.env/init.zsh
 [ -f ~/.zsh/.zsh-history ] && source ~/.zsh/.zsh-history
 [ -f ~/.zshlogin ] && source ~/.zshlogin
 
