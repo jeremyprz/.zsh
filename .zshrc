@@ -47,4 +47,6 @@ PATH=~/bin:"${PATH}"
 [ -f ~/.zsh/.zsh-history ] && source ~/.zsh/.zsh-history
 [ -f ~/.zshlogin ] && source ~/.zshlogin
 
+# Projects which may or may not be installed
+[ -d ~/dev/relay/bin ] && export PATH=$PATH:~/dev/relay/bin
 
