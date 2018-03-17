@@ -6,4 +6,6 @@ files=(`ls -a ~/.zsh/ | grep .zsh`)
 for file in $files; do 
   [ ! -e "$HOME/$file" ] && ln -s $HOME/.zsh/$file
 done
+file=.tmux.conf
+[ ! -e "$HOME/$file" ] && ln -s $HOME/.zsh/$file
 popd
