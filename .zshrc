@@ -1,5 +1,4 @@
 #!/bin/zsh
-export HOSTNAME=`hostname -s`
 export DISABLE_AUTO_UPDATE="true"
 
 [ ! -f ~/.oh-my-zsh/custom/themes/organl.zsh-theme ] && ~/.zsh/bin/install-organl-zsh-theme

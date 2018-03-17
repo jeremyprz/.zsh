@@ -1,0 +1,59 @@
+#!/bin/bash
+
+sun=☉
+earth=♁
+ground=⏚
+cloud=☁
+atom=⚛
+neptune=♆
+airplane=✈︎
+heart=♥︎
+diamonds=❖
+yinyang=☯
+flag=⚐
+node=☊
+star=★
+
+case `hostname -s | tr '[:upper:]' '[:lower:]'` in
+    "farfel")
+        location=$star
+        ;;
+    "minecraft")
+        location=$ground
+        ;;
+    "f45c89a3afa7") 
+        location=$airplane
+        ;;
+    "a82066391a90")
+        location=$atom
+        ;;
+    "dev-dsk-przasnys-m4xl-i-34f5ceef") 
+        location=$cloud
+        ;;
+    "newman")
+        location=$diamonds
+        ;;
+    "motion")
+        location=$yinyang
+        ;;
+    "capture")
+        location=$flag
+        ;;
+    "kramer") 
+        location=$earth
+        ;;
+    "hackintosh") 
+        location=$neptune
+        ;;
+    "soupnazi") 
+        location=$heart
+        ;;
+    "SEA-9901942132")
+        location=$node
+	;;
+    *)
+        location="¿"
+        ;;
+esac
+
+echo -n $location
