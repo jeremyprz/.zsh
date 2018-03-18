@@ -8,4 +8,6 @@ for file in $files; do
 done
 file=.tmux.conf
 [ ! -e "$HOME/$file" ] && ln -s $HOME/.zsh/$file
+file=.tmux.conf.local
+[ ! -e "$HOME/$file" ] && ln -s $HOME/.zsh/$file
 popd
