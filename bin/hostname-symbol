@@ -39,7 +39,7 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "capture")
         location=$flag
         ;;
-    "kramer") 
+    "kramer"|"barb")
         location=$earth
         ;;
     "hackintosh") 
