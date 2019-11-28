@@ -24,7 +24,7 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "f45c89a3afa7") 
         location=$airplane
         ;;
-    "a82066391a90")
+    "minecraft")
         location=$atom
         ;;
     "dev-dsk-przasnys-c4-4xl-a0c7c0c5") 
