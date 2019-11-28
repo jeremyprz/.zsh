@@ -15,7 +15,7 @@ node=☊
 star=★
 
 case `hostname -s | tr '[:upper:]' '[:lower:]'` in
-    "JDP-Laptop")
+    "jdp-laptop")
         location=$star
         ;;
     "minecraft")
