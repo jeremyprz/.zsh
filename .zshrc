@@ -13,12 +13,17 @@ fi
 
 umask 022
 
-if [ -d /Library/Java/JavaVirtualMachines ]; then
+OPEN_JDK=`find /Library/Java/JavaVirtualMachines -name 'adoptopenjdk*' -depth 1 | sort | tail -1`
+if [ -d "${OPEN_JDK}" ]; then
+    export JDK_VERSION=`echo $OPEN_JDK | sed 's/.*\///'`
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/$JDK_VERSION/Contents/Home
+    export PATH=${JAVA_HOME}/bin:${PATH}
+elif [ -d /Library/Java/JavaVirtualMachines ]; then
     export JDK_VERSION=`ls -a /Library/Java/JavaVirtualMachines | sort | tail -1`
     export JAVA_HOME=/Library/Java/JavaVirtualMachines/$JDK_VERSION/Contents/Home
     export PATH=${JAVA_HOME}/bin:${PATH}
-    [ -f /bin/launchctl ] && /bin/launchctl setenv JAVA_HOME ${JAVA_HOME}
 fi
+[ -d "$JAVA_HOME" ] && [ -f /bin/launchctl ] && /bin/launchctl setenv JAVA_HOME ${JAVA_HOME}
 
 if [ -d ~/Library/Python/2.7/bin ]; then
     export PYTHON_27_HOME=~/Library/Python/2.7
