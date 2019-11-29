@@ -13,7 +13,9 @@ fi
 
 umask 022
 
-OPEN_JDK=`find /Library/Java/JavaVirtualMachines -name 'adoptopenjdk*' -depth 1 | sort | tail -1`
+if [ -d /Library/Java/JavaVirtualMachines ]; then
+    OPEN_JDK=`find /Library/Java/JavaVirtualMachines -name 'adoptopenjdk*' -depth 1 | sort | tail -1`
+fi
 if [ -d "${OPEN_JDK}" ]; then
     export JDK_VERSION=`echo $OPEN_JDK | sed 's/.*\///'`
     export JAVA_HOME=/Library/Java/JavaVirtualMachines/$JDK_VERSION/Contents/Home
