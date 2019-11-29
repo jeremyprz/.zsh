@@ -53,6 +53,7 @@ PATH=~/bin:"${PATH}"
 [ -f ~/.zsh/.zsh-history ] && source ~/.zsh/.zsh-history
 [ -f ~/.zshlogin ] && source ~/.zshlogin
 [ -d ~/.toolbox/bin ] && PATH=~/.toolbox/bin:${PATH}
+[ -d ~/.local/bin ] && PATH=~/.local/bin:${PATH}
 
 # Projects which may or may not be installed
 [ -d ~/dev/relay/bin ] && export PATH=$PATH:~/dev/relay/bin
