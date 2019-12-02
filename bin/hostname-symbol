@@ -33,7 +33,7 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "newman")
         location=$diamonds
         ;;
-    "motion")
+    "proto")
         location=$yinyang
         ;;
     "capture")
