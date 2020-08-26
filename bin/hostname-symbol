@@ -24,10 +24,13 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "f45c89a3afa7") 
         location=$airplane
         ;;
+    "3c22fbd0010b")
+        location=$airplane
+        ;;
     "unused-1")
         location=$atom
         ;;
-    "dev-dsk-przasnys-c4-4xl-a0c7c0c5") 
+    "dev-dsk-przasnys-c4-4xl-1d3f0454") 
         location=$cloud
         ;;
     "newman")
