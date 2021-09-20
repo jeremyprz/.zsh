@@ -18,7 +18,7 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "jdp-laptop")
         location=$star
         ;;
-    "minecraft")
+    "jdp--pc")
         location=$ground
         ;;
     "f45c89a3afa7") 
