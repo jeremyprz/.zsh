@@ -30,7 +30,7 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "unused-1")
         location=$atom
         ;;
-    "dev-dsk-przasnys-c4-4xl-1d3f0454") 
+    "dev-dsk-przasnys-2b-0758ae36") 
         location=$cloud
         ;;
     "newman")
