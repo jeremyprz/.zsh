@@ -56,6 +56,17 @@ PATH=~/bin:"${PATH}"
 [ -d ~/.toolbox/bin ] && PATH=~/.toolbox/bin:${PATH}
 [ -d ~/.local/bin ] && PATH=~/.local/bin:${PATH}
 
+# Various Programs which may or may not be installed
+if [ -d /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin ]; then
+  # Why the F do people put spaces in paths?
+  # Follow this instead: https://code.visualstudio.com/docs/setup/mac
+  # 1. Open Visual Studio Code
+  # 2. command-shift-P
+  # 3. type `shell command`
+  # 4. Select 'Shell Command: Install 'code' command in PATH
+  # ... should be put into /usr/local/bin (which is already in path)
+fi
+
 # Projects which may or may not be installed
 [ -d ~/dev/relay/bin ] && export PATH=$PATH:~/dev/relay/bin
 
