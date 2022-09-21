@@ -97,3 +97,6 @@ export PATH=$HOME/.toolbox/bin:$PATH
 
 # log4j JNDI fixes
 export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
+
+fpath=(~/.zsh/completion $fpath)
+autoload -Uz compinit && compinit -i
