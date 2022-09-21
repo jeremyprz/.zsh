@@ -13,6 +13,7 @@ yinyang=☯
 flag=⚐
 node=☊
 star=★
+anchor=⚓︎
 
 case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "jdp-laptop")
@@ -26,6 +27,9 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
         ;;
     "3c22fbd0010b")
         location=$airplane
+        ;;
+    "c889f3bb323b")
+        location=$anchor
         ;;
     "unused-1")
         location=$atom
