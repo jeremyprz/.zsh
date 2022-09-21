@@ -14,15 +14,20 @@ fi
 umask 022
 
 if [ -d /Library/Java/JavaVirtualMachines ]; then
-    OPEN_JDK=`find /Library/Java/JavaVirtualMachines -name 'adoptopenjdk*' -depth 1 | sort | tail -1`
-fi
-if [ -d "${OPEN_JDK}" ]; then
-    export JDK_VERSION=`echo $OPEN_JDK | sed 's/.*\///'`
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/$JDK_VERSION/Contents/Home
-    export PATH=${JAVA_HOME}/bin:${PATH}
-elif [ -d /Library/Java/JavaVirtualMachines ]; then
-    export JDK_VERSION=`ls -a /Library/Java/JavaVirtualMachines | sort | tail -1`
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/$JDK_VERSION/Contents/Home
+    JDKS=/Library/Java/JavaVirtualMachines
+elif [ -d /opt/jvm ]; then
+    JDKS=/opt/jvm
+else
+    JDKS=~/.zsh/.zshrc/unable/to/find/jdks
+fi 
+
+if [ -d ${JDKS} ]; then
+    JDK=`ls ${JDKS} | grep -E 'amazon-corretto-([0-9]+)\.jdk' | sort -V | tail -1`
+    if [ -d ${JDKS}/${JDK}/bin ]; then
+        JAVA_HOME=${JDKS}/${JDK}
+    elif [ -d ${JDKS}/${JDK}/Contents/Home ]; then
+        JAVA_HOME=${JDKS}/${JDK}/Contents/Home
+    fi
     export PATH=${JAVA_HOME}/bin:${PATH}
 fi
 [ -d "$JAVA_HOME" ] && [ -f /bin/launchctl ] && /bin/launchctl setenv JAVA_HOME ${JAVA_HOME}
@@ -30,6 +35,11 @@ fi
 if [ -d ~/Library/Python/2.7/bin ]; then
     export PYTHON_27_HOME=~/Library/Python/2.7
     export PATH=${PATH}:$PYTHON_27_HOME/bin
+fi
+
+if [ -d /opt/homebrew/bin ]; then
+    # Prioritize Homebrew over rest of path
+    export PATH=/opt/homebrew/bin:${PATH}
 fi
 
 if [ -d /opt/maven ]; then
