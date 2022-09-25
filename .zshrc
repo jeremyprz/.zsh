@@ -40,6 +40,8 @@ fi
 if [ -d /opt/homebrew/bin ]; then
     # Prioritize Homebrew over rest of path
     export PATH=/opt/homebrew/bin:${PATH}
+elif [ -d ~/.linuxbrew/bin ]; then
+    export PATH=~/.linuxbrew/bin:${PATH}
 fi
 
 if [ -d /opt/maven ]; then
