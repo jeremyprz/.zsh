@@ -95,5 +95,5 @@ autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit -i
 
 if [ -f "$(which aws_completer)" ]; then
-  complete -C "$(which aws_completer)"
+  complete -C "$(which aws_completer)" aws
 fi
