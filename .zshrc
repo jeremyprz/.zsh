@@ -32,11 +32,6 @@ if [ -d ${JDKS} ]; then
 fi
 [ -d "$JAVA_HOME" ] && [ -f /bin/launchctl ] && /bin/launchctl setenv JAVA_HOME ${JAVA_HOME}
 
-if [ -d ~/Library/Python/2.7/bin ]; then
-    export PYTHON_27_HOME=~/Library/Python/2.7
-    export PATH=${PATH}:$PYTHON_27_HOME/bin
-fi
-
 if [ -d /opt/homebrew/bin ]; then
     # Prioritize Homebrew over rest of path
     export PATH=/opt/homebrew/bin:${PATH}
@@ -79,9 +74,6 @@ if [ -d /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin ]; the
   # ... should be put into /usr/local/bin (which is already in path)
 fi
 
-# Projects which may or may not be installed
-[ -d ~/dev/relay/bin ] && export PATH=$PATH:~/dev/relay/bin
-
 # Colorized man pages
 man() {
 	env \
@@ -99,4 +91,9 @@ man() {
 export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
 
 fpath=(~/.zsh/completion $fpath)
+autoload bashcompinit && bashcompinit
 autoload -Uz compinit && compinit -i
+
+if [ -f "$(which aws_completer)" ]; then
+  complete -C "$(which aws_completer)"
+fi
