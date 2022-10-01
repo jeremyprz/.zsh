@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+ROOT=`echo $0:A | sed -E 's/\/bin\/.*//'`
+
+zparseopts -D -E -help=help {-d,-debug}=debug {r,-required}:=required {o,-optional}:=optional
+
+read -r -d '' HELP <<- EOM
+NAME
+  ${0}
+
+DESCRIPTION
+  A simple skeleton script to be modified by the author
+
+SYNOPSIS
+  ${0} [--help] --required <required-arg> [--optional <optional-arg>]
+
+OPTIONS$
+  --help (boolean) Prints this help
+  --debug (boolean) Enables debug output
+  --required (string) A required argument
+  --optional (string) An optional argument
+EOM
+
