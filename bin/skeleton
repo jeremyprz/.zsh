@@ -2,7 +2,11 @@
 
 ROOT=`echo $0:A | sed -E 's/\/bin\/.*//'`
 
-zparseopts -D -E -help=help {-d,-debug}=debug {r,-required}:=required {o,-optional}:=optional
+zparseopts -D -E \
+  {h,-help}=help \
+  {d,-debug}=debug \
+  {r,-required}:=required \
+  {o,-optional}:=optional
 
 read -r -d '' HELP <<- EOM
 NAME
