@@ -12,7 +12,9 @@ zparseopts -D -E \
   {o,-optional}:=optional \
   {c,-clone}:=clone 
 
-SUPPORTED=(colortest ideographs)
+SUPPORTED=(colortest ideographs zshcolors)
+
+autoload -Uz colors && colors
 
 # https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
  C="\e[0m"       # 0  = clear codes
@@ -45,17 +47,21 @@ ${O}SYNOPSIS${C}
   ${0} [${y}--help${C}] \
 ${y}--required${C} ${c}<required-arg>${C} \
 [${y}--optional${C} ${c}<optional-arg>${C}] \
-[${y}--colortest${C}] \
 [${y}--clone${C}] \
 [${y}--ideographs${C}] \
+<command1> ... <commandN>
 
 ${O}OPTIONS${C}
   ${y}--help${C} (boolean) Prints this help
   ${y}--debug${C} (boolean) Enables debug output
   ${y}--required${C} (string) A required argument
   ${y}--optional${C} (string) An optional argument
-  ${y}--colortest${C} (boolean) Dump the colors to the console
   ${y}--clone${C} (path) Dumps the contents of this skeleton file to the supplied file
+
+${O}COMMANDS${C}
+  ${y}colortest${C} Prints example colors to the terminal
+  ${y}ideographs${C} Prints time related unicode ideographs to the console
+  ${y}zshcolors${C} Prints color keys known to ZSH
 
 ${O}INSTALLATION${C}
   ${O}ROOT${C}: ${ROOT}
@@ -109,7 +115,7 @@ fi
 
 OPTIONAL="${optional}"
 
-CLONE="${clone}"
+CLONE="${clone[2]}"
 function clone() {
   TARGET=$(dirname ${CLONE})/$(basename ${CLONE})
   if [ -f ${TARGET} ]; then
@@ -122,6 +128,7 @@ function clone() {
     mkdir -p ${DIR}
   fi
   cat ${BIN}/${NAME} > ${TARGET}
+  chmod 755 ${TARGET}
 }
 [ ! -z "${clone}" ] && clone
 
@@ -147,6 +154,15 @@ function ideographs() {
   ideodump "3358" 25 # Hours: ㍘ ... ㍰
 }
 
+# Dumps the keys available in $colors array
+# Any item shown can be looked up via: $colors[value]
+function zshcolors() {
+  for k in ${color}
+  do 
+    print -- key: $k 
+  done
+}
+
 COMMANDS=()
 for cmd in $*; do
   COMMANDS+=("$cmd")
@@ -156,6 +172,7 @@ for COMMAND in $COMMANDS; do
   case "$COMMAND" in
     colortest) colortest ;;
     ideographs) ideographs ;;
+    zshcolors) zshcolors ;;
     *)
       GUIDANCE+="Unexpected command '${COMMAND}'. Expected on of: ${SUPPORTED}\n"
       guidance "${failfast}"

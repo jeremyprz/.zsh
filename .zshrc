@@ -1,16 +1,6 @@
 #!/bin/zsh
-export DISABLE_AUTO_UPDATE="true"
 
-[ ! -f ~/.oh-my-zsh/custom/themes/organl.zsh-theme ] && ~/.zsh/bin/install-organl-zsh-theme
-
-if [ -d $HOME/.oh-my-zsh ]; then
-  [ -z "$ZSH_THEME" ] && ZSH_THEME="organl"
-  ZSH=$HOME/.oh-my-zsh
-  # see: ~/.oh-my-zsh/plugins/*
-  plugins=(git textmate sublime docker)
-  source $HOME/.oh-my-zsh/oh-my-zsh.sh
-fi
-
+export PATH=${PATH}:~/.zsh/bin
 umask 022
 
 if [ -d /Library/Java/JavaVirtualMachines ]; then
@@ -63,32 +53,27 @@ PATH=~/bin:"${PATH}"
 [ -d ~/.toolbox/bin ] && PATH=~/.toolbox/bin:${PATH}
 [ -d ~/.local/bin ] && PATH=~/.local/bin:${PATH}
 
-# Various Programs which may or may not be installed
-if [ -d /Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin ]; then
-  # Why the F do people put spaces in paths?
-  # Follow this instead: https://code.visualstudio.com/docs/setup/mac
-  # 1. Open Visual Studio Code
-  # 2. command-shift-P
-  # 3. type `shell command`
-  # 4. Select 'Shell Command: Install 'code' command in PATH
-  # ... should be put into /usr/local/bin (which is already in path)
-fi
-
-# Colorized man pages
-man() {
-	env \
-		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-		LESS_TERMCAP_md=$(printf "\e[1;31m") \
-		LESS_TERMCAP_me=$(printf "\e[0m") \
-		LESS_TERMCAP_se=$(printf "\e[0m") \
-		LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-		LESS_TERMCAP_ue=$(printf "\e[0m") \
-		LESS_TERMCAP_us=$(printf "\e[1;32m") \
-		man "$@"
-}
-
 # log4j JNDI fixes
 export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
+
+export DISABLE_AUTO_UPDATE="true"
+
+[ ! -f ~/.oh-my-zsh/custom/themes/organl.zsh-theme ] && ~/.zsh/init/install-organl-zsh-theme
+
+if [ -d $HOME/.oh-my-zsh ]; then
+  [ -z "$ZSH_THEME" ] && ZSH_THEME="organl"
+  ZSH=$HOME/.oh-my-zsh
+  # see: ~/.oh-my-zsh/plugins/*
+  plugins=(
+    git 
+    colored-man-pages
+    textmate 
+    sublime 
+    docker 
+    tmux 
+    vscode)
+  source $HOME/.oh-my-zsh/oh-my-zsh.sh
+fi
 
 fpath=(~/.zsh/completion $fpath)
 autoload bashcompinit && bashcompinit
