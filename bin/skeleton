@@ -4,15 +4,15 @@ ROOT=$(echo $0:A | sed -E 's/\/bin\/.*//')
 NAME=$(basename ${0})
 BIN=${ROOT}/bin
 
-zparseopts -D -E \
-  {h,-help}=help \
-  {d,-debug}=debug \
-  {x,-failfast}=failfast \
-  {r,-required}:=required \
-  {o,-optional}:=optional \
-  {c,-clone}:=clone 
+zparseopts -D -E -A opts \
+  -help=help \
+  -debug=debug \
+  -failfast=failfast \
+  -required:=required \
+  -optional:=optional \
+  -target:=target
 
-SUPPORTED=(colortest ideographs zshcolors)
+SUPPORTED=(clone colortest ideographs zshcolors dumpargs)
 
 autoload -Uz colors && colors
 
@@ -48,26 +48,38 @@ ${O}SYNOPSIS${C}
 ${y}--required${C} ${c}<required-arg>${C} \
 [${y}--optional${C} ${c}<optional-arg>${C}] \
 [${y}--clone${C}] \
-[${y}--ideographs${C}] \
 <command1> ... <commandN>
 
 ${O}OPTIONS${C}
-  ${y}--help${C} (boolean) Prints this help
-  ${y}--debug${C} (boolean) Enables debug output
-  ${y}--required${C} (string) A required argument
-  ${y}--optional${C} (string) An optional argument
-  ${y}--clone${C} (path) Dumps the contents of this skeleton file to the supplied file
+  ${y}--help${C} ..... (boolean) Prints this help
+  ${y}--debug${C} .... (boolean) Enables debug output
+  ${y}--required${C} . (string) A required argument
+  ${y}--optional${C} . (string) An optional argument
+  ${y}--target${C} ... (path) A target file path
 
 ${O}COMMANDS${C}
-  ${y}colortest${C} Prints example colors to the terminal
-  ${y}ideographs${C} Prints time related unicode ideographs to the console
-  ${y}zshcolors${C} Prints color keys known to ZSH
+  ${y}dumpargs${C} ... Prints the arguments
+  ${y}colortest${C} .. Prints example colors to the terminal
+  ${y}ideographs${C} . Prints time related unicode ideographs to the console
+  ${y}zshcolors${C}  . Prints color keys known to ZSH
+  ${y}clone${C} ...... Clones this script to the specified target file 
 
 ${O}INSTALLATION${C}
   ${O}ROOT${C}: ${ROOT}
   ${O} BIN${C}: ${BIN}
   ${O} ABS${C}: ${BIN}/${NAME}
 EOM
+
+# Dumps the args to stdout
+function dumpargs() {
+  echo "${y}--help${C} ..... (boolean) . $help" 
+  echo "${y}--debug${C} .... (boolean) . $debug"
+  echo "${y}--required${C} . (string) .. $opts[--required]"
+  echo "${y}--optional${C} . (string) .. $opts[--optional]"
+  echo "${y}--target${C} ... (path) .... $opts[--target]"
+}
+
+[ ! -z "$debug" ] && dumpargs
 
 # If --help was specified, show help and exit
 function help () { echo "${HELP}" }
@@ -77,12 +89,12 @@ function help () { echo "${HELP}" }
 # If any arg passed in, show help+guidance and exit with error
 guidance() {
 read -r -d '' CONTENT <<- EOC
-${O}GUIDANCE${C}
+\n${O}GUIDANCE${C}
 ${GUIDANCE}
 EOC
-  if [ -z "$0" ]; then # Pass an arg to fail fast
+  if [ ! -z "$1" ]; then # Pass an arg to fail fast
     help
-    echo ${GUIDANCE}
+    echo ${CONTENT}
     exit -1
   fi
 }
@@ -107,32 +119,39 @@ echo
 }
 [ ! -z "${colortest}" ] && colortest && exit 0
 
-REQUIRED="${required}"
+# Example of a required argument
+REQUIRED="${opts[--required]}"
 if [ -z "${REQUIRED}" ]; then
-  GUIDANCE+="  ${y}--required ${r}is a ${O}required${C}${r} argument${C}\n"
+  GUIDANCE="${GUIDANCE}  Argument '${y}--required${C}' is ${r}${O}required${C}, but was not supplied\n"
   guidance "${failfast}"
 fi
 
-OPTIONAL="${optional}"
+# Example of an optional argument
+OPTIONAL="${optional[2]}"
 
-CLONE="${clone[2]}"
 function clone() {
-  TARGET=$(dirname ${CLONE})/$(basename ${CLONE})
-  if [ -f ${TARGET} ]; then
-    vared -p 'File exists, overwrite? [y/n]: ' -c OVERWRITE
+  TARGET="$opts[--target]"
+  [ -z "${TARGET}" ] && \
+    GUIDANCE="${GUIDANCE}  Argument '${y}--target${C}' is ${r}${O}required${C}, when performing ${O}clone${C} command\n" && \
+    guidance "force"
+
+  TPATH=$(dirname ${TARGET})/$(basename ${TARGET})
+  if [ -f ${TPATH} ]; then
+    echo "${O}${y}Target file exists${C}, ${O}overwrite?${C} ${TPATH}"
+    vared -p "[y/n]: " -c OVERWRITE
     [[ "${OVERWRITE}" == "y" ]] || exit -1
-    echo "Overwriting: ${TARGET}"
+    echo "Overwriting: ${TPATH}"
   fi
-  DIR=$(dirname ${CLONE})
+  DIR=$(dirname ${TPATH})
   if [ ! -d ${DIR} ]; then
     mkdir -p ${DIR}
   fi
-  cat ${BIN}/${NAME} > ${TARGET}
-  chmod 755 ${TARGET}
+  cat ${BIN}/${NAME} > ${TPATH}
+  chmod 755 ${TPATH}
 }
 [ ! -z "${clone}" ] && clone
 
-
+# Dumps a set of unicode characters out to the terminal
 function ideodump() {
   UNI=${1}
   END=$(expr ${2} - 1)
@@ -145,8 +164,9 @@ function ideodump() {
     # Convert back to base16
     CODE=$(echo "obase=16; ibase=10; ${CALV}" | bc)
     # Print to the console 
-    echo -e "\u${CODE}"
+    echo -n -e "\u${CODE}"
   done
+  echo
 }
 
 function ideographs() {
@@ -154,13 +174,35 @@ function ideographs() {
   ideodump "3358" 25 # Hours: ㍘ ... ㍰
 }
 
+#
+function zsh_color_row() {
+  #    1| 1234567890123 | 12345678901234 | 123456789012 | 12345678901234 |
+  HEAD=" | ---- KEY ---- | - FOREGROUND - | --- BOLD --- | - BACKGROUND - |"
+  key=$1
+  [ -z "${key}" ] && echo ${HEAD} && return
+  PAD=$(printf '%0.1s' " "{1..$((13 - ${#key} ))})
+   KEY="$key$PAD"
+    FG=$(printf '%0.1s' "●"{1..14})
+  BOLD=$(printf '%0.1s' "●"{1..12})
+    BG=$(printf '%0.1s' "●"{1..14})
+  FG="$fg[$key]${FG}$reset_color"
+  BOLD="$fg_bold[$key]${BG}$reset_color"
+  BG="$bg[$key]${BG}$reset_color"
+  echo " | $KEY | $FG | $BOLD | $BG |"
+}
+
 # Dumps the keys available in $colors array
 # Any item shown can be looked up via: $colors[value]
 function zshcolors() {
-  for k in ${color}
-  do 
-    print -- key: $k 
-  done
+  zsh_color_row # header
+  zsh_color_row black
+  zsh_color_row red
+  zsh_color_row green
+  zsh_color_row yellow
+  zsh_color_row blue
+  zsh_color_row magenta
+  zsh_color_row cyan
+  zsh_color_row white
 }
 
 COMMANDS=()
@@ -170,17 +212,19 @@ done
 
 for COMMAND in $COMMANDS; do
   case "$COMMAND" in
+    dumpargs) dumpargs ;;
     colortest) colortest ;;
     ideographs) ideographs ;;
     zshcolors) zshcolors ;;
+    clone) clone ;;
     *)
-      GUIDANCE+="Unexpected command '${COMMAND}'. Expected on of: ${SUPPORTED}\n"
+      GUIDANCE="${GUIDANCE}  Command '${y}${COMMAND}${C}' ${r}${O}unexpected${C}, must be one of: ${SUPPORTED}\n"
       guidance "${failfast}"
       ;;
   esac
 done
 
-if [ -z "${GUIDANCE}" ]; then
+if [ ! -z "${GUIDANCE}" ]; then
   # We have accumulated guidance
   # Force the guidance to be output with a non-zero string arg
   guidance "dump-all-guidance"

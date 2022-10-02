@@ -65,7 +65,9 @@ if [ -d $HOME/.oh-my-zsh ]; then
   ZSH=$HOME/.oh-my-zsh
   # see: ~/.oh-my-zsh/plugins/*
   plugins=(
-    git 
+    git
+    git-auto-fetch
+    git-prompt
     colored-man-pages
     textmate 
     sublime 
