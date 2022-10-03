@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+if [ ! -d ~/.zsh ]; then
+  echo "Cloning .zsh (RW): ~/.zsh"
+  git clone git@github.com:jeremyprz/.zsh.git ~/.zsh
+  if [ $? -ne 0 ]; then
+    echo "Clone of failed, trying fallback..."
+    echo "Cloning .zsh (RO): ~/.zsh"
+    git clone https://github.com/jeremyprz/.zsh.git ~/.zsh
+  fi 
+fi
