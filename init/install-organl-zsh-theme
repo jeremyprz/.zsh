@@ -1,8 +1,6 @@
 #!/bin/zsh
 
-ROOT=$(echo $0:A | sed -E 's/\/init\/.*//')
-NAME=$(basename ${0})
-INIT=${ROOT}/init
+INIT=~/.zsh/init
 
 if [ ! -d ~/.oh-my-zsh ]; then
   ${INIT}/install-oh-my-zsh || { echo "Unable to bootstrap oh-my-zsh!" && exit -1 }
