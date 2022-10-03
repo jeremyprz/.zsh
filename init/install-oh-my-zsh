@@ -1,3 +1,11 @@
 #!/bin/zsh
 
-[ ! -d ~/.oh-my-zsh ] && git clone git@github.com:ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+if [ ! -d ~/.oh-my-zsh ]; then
+  echo "Cloning ohmyzsh (RW): ~/.oh-my-zsh"
+  git clone git@github.com:ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+  then [ $? -eq 0 ];
+    echo "Clone of failed, trying fallback..."
+    echo "Cloning ohmyzsh (RO): ~/.oh-my-zsh"
+    git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+  fi 
+fi
