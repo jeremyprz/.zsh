@@ -7,15 +7,15 @@ INIT=${ROOT}/init
 if [ ! -d ~/.oh-my-zsh ]; then
   ${INIT}/install-oh-my-zsh || { echo "Unable to bootstrap oh-my-zsh!" && exit -1 }
 fi
-
-if [ ! -d ~/.oh-my-zsh/custom/.git ]; then
+TARGET=~/.oh-my-zsh/custom
+if [ ! -d ${TARGET}/.git ]; then
   echo "OrganL oh-my-zsh theme is not installed."
-  echo "Cloning OrganL theme (RW) to: ~/.oh-my-zsh/custom"
-  git clone git@github.com:organl/oh-my-zsh-organl.git custom
+  echo "Cloning OrganL theme (RW) to: ${TARGET}"
+  git clone git@github.com:organl/oh-my-zsh-organl.git ${TARGET}
   if [ $? -ne 0 ]; then
     echo "Clone failed, trying fallback..."
-    echo "Cloning OrganL theme (RO) to: ~/.oh-my-zsh/custom"
-    git clone https://github.com/organl/oh-my-zsh-organl.git custom
+    echo "Cloning OrganL theme (RO) to: ${TARGET}"
+    git clone https://github.com/organl/oh-my-zsh-organl.git ${TARGET}
   fi
 fi
 
