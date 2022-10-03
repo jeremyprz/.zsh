@@ -12,7 +12,7 @@ if [ ! -d ~/.oh-my-zsh/custom/.git ]; then
   echo "OrganL oh-my-zsh theme is not installed."
   echo "Cloning OrganL theme (RW) to: ~/.oh-my-zsh/custom"
   git clone git@github.com:organl/oh-my-zsh-organl.git custom
-  then [ $? -eq 0 ];
+  if [ $? -eq 0 ]; then
     echo "Clone failed, trying fallback..."
     echo "Cloning OrganL theme (RO) to: ~/.oh-my-zsh/custom"
     git clone https://github.com/organl/oh-my-zsh-organl.git custom
