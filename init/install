@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+ROOT=~/.zsh
+INIT=~/.zsh/init
+
 if [ ! -d ~/.zsh ]; then
   echo "Cloning .zsh (RW): ~/.zsh"
   git clone git@github.com:jeremyprz/.zsh.git ~/.zsh
@@ -9,3 +12,6 @@ if [ ! -d ~/.zsh ]; then
     git clone https://github.com/jeremyprz/.zsh.git ~/.zsh
   fi 
 fi
+${INIT}/install-oh-my-zsh
+${INIT}/install-orgnal-zsh-theme
+${INIT}/install-symlinks
