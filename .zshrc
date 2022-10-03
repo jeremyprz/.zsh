@@ -3,6 +3,9 @@
 export PATH=${PATH}:~/.zsh/bin
 umask 022
 
+# https://stackoverflow.com/questions/62931101/i-have-multiple-files-of-zcompdump-why-do-i-have-multiple-files-of-these
+export ZSH_COMPDUMP="~/.zsh/.cache/.zcompdump-${HOST}"
+
 if [ -d /Library/Java/JavaVirtualMachines ]; then
     JDKS=/Library/Java/JavaVirtualMachines
 elif [ -d /opt/jvm ]; then
