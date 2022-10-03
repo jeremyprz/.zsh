@@ -8,8 +8,13 @@ if [ ! -d ~/.oh-my-zsh ]; then
   ${INIT}/install-oh-my-zsh || { echo "Unable to bootstrap oh-my-zsh!" && exit -1 }
 fi
 TARGET=~/.oh-my-zsh/custom
+# TODO: Possible improvement...
+# 1. Check out OrganL theme into ~/.zsh/oh-my-zsh-organl
+# 2. symlink to it from within ${TARGET}
+# This should allow oh-my-zsh to progress without collisions
 if [ ! -d ${TARGET}/.git ]; then
   echo "OrganL oh-my-zsh theme is not installed."
+  [ -d ${TARGET} ] && { echo "Purging default oh-my-zsh custom content..." && rm -r ${TARGET}}
   echo "Cloning OrganL theme (RW) to: ${TARGET}"
   git clone git@github.com:organl/oh-my-zsh-organl.git ${TARGET}
   if [ $? -ne 0 ]; then
