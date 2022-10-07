@@ -55,6 +55,7 @@ PATH=~/bin:"${PATH}"
 [ -f ~/.zshlogin ] && source ~/.zshlogin
 [ -d ~/.toolbox/bin ] && PATH=~/.toolbox/bin:${PATH}
 [ -d ~/.local/bin ] && PATH=~/.local/bin:${PATH}
+[ -d ~/dev/bin ] && PATH=~/dev/bin:${PATH}
 
 # log4j JNDI fixes
 export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
