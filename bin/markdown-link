@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+set -o extendedglob
+
+function markdownify() {
+    URL=$1
+    PREFIX=$(echo ${URL} | sed -E 's/(.*)\/([^\/]+)$/\1/')
+    SUFFIX=$(echo ${URL} | sed -E 's/(.*)\/([^\/]+)$/\2/')
+    echo "[${SUFFIX}](${PREFIX}/${SUFFIX})"
+}
+
+while read URL
+do
+    markdownify ${URL}
+done
