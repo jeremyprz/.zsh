@@ -1,0 +1,197 @@
+#!/bin/zsh
+
+autoload -Uz colors && colors
+
+ROOT=$(echo $0:A | sed -E 's/\/bin\/.*//')
+NAME=$(basename ${0})
+BIN=${ROOT}/bin
+
+zparseopts -D -E -A opts \
+  -help=help \
+  -debug=debug \
+  -fetch=fetch \
+  -dir:=dir
+
+function set_colors() {
+    # https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+    {[[ "$1" == "unset" ]] && unset C  } ||  C="\e[0m"       # 0  = clear codes
+    {[[ "$1" == "unset" ]] && unset O  } ||  O="\e[1m"       # 1  = turn on bOld
+    {[[ "$1" == "unset" ]] && unset k  } ||  k="\e[38;5;0m"  # 0  = blacK
+    {[[ "$1" == "unset" ]] && unset r  } ||  r="\e[38;5;1m"  # 1  = Red
+    {[[ "$1" == "unset" ]] && unset g  } ||  g="\e[38;5;2m"  # 2  = Green
+    {[[ "$1" == "unset" ]] && unset y  } ||  y="\e[38;5;3m"  # 3  = Yellow
+    {[[ "$1" == "unset" ]] && unset b  } ||  b="\e[38;5;4m"  # 4  = Blue
+    {[[ "$1" == "unset" ]] && unset m  } ||  m="\e[38;5;5m"  # 5  = Magenta
+    {[[ "$1" == "unset" ]] && unset c  } ||  c="\e[38;5;6m"  # 6  = Cyan
+    {[[ "$1" == "unset" ]] && unset w  } ||  w="\e[38;5;7m"  # 7  = White
+    {[[ "$1" == "unset" ]] && unset iK } || iK="\e[38;5;8m"  # 8  = Intense blacK (grey)
+    {[[ "$1" == "unset" ]] && unset ir } || ir="\e[38;5;9m"  # 9  = Intense Red
+    {[[ "$1" == "unset" ]] && unset ig } || ig="\e[38;5;10m" # 10 = Intense Green
+    {[[ "$1" == "unset" ]] && unset iy } || iy="\e[38;5;11m" # 11 = Intense Yellow
+    {[[ "$1" == "unset" ]] && unset ib } || ib="\e[38;5;12m" # 12 = Intense Blue
+    {[[ "$1" == "unset" ]] && unset im } || im="\e[38;5;13m" # 13 = Inense Magenta
+    {[[ "$1" == "unset" ]] && unset ic } || ic="\e[38;5;14m" # 14 = Intense Cyan
+    {[[ "$1" == "unset" ]] && unset iw } || iw="\e[38;5;15m" # 15 = Intense White
+}
+
+read -r -d '' HELP <<- EOM
+${O}NAME${C}
+  ${NAME}
+
+${O}DESCRIPTION
+  Dumps a succinct, colorized git status to stdout
+
+${O}SYNOPSIS${C}
+  ${0} [${y}--help${C}]
+  <dir1>...<dirN>
+
+${O}OPTIONS${C}
+  ${y}--help${C} ..... (boolean) Prints this help
+  ${y}--debug${C} .... (boolean) Enables debug output
+
+${O}INSTALLATION${C}
+  ${O}ROOT${C}: ${ROOT}
+  ${O} BIN${C}: ${BIN}
+  ${O} ABS${C}: ${BIN}/${NAME}
+EOM
+
+# Dumps the args to stdout
+function dumpargs() {
+  echo "${y}--help${C} ..... (boolean) . $help" 
+  echo "${y}--debug${C} .... (boolean) . $debug"
+  echo "${y}--fetch${C} .... (boolean) . $fetch"
+}
+
+[ ! -z "$debug" ] && dumpargs
+
+# If --help was specified, show help and exit
+function help () { echo "${HELP}" }
+[[ -n  "$help"  ]] && help && exit 0
+
+FETCH="${fetch}"
+ECHODIR="${echo}"
+
+git_super_status() {
+    if [ -n "$__CURRENT_GIT_STATUS" ]; then
+      STATUS="$ZSH_THEME_GIT_PROMPT_PREFIX$ZSH_THEME_GIT_PROMPT_BRANCH$GIT_BRANCH${C}"
+      if [ "$GIT_BEHIND" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_BEHIND$GIT_BEHIND${C}"
+      fi
+      if [ "$GIT_AHEAD" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_AHEAD$GIT_AHEAD${C}"
+      fi
+      STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_SEPARATOR"
+      if [ "$GIT_STAGED" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STAGED$GIT_STAGED${C}"
+      fi
+      if [ "$GIT_CONFLICTS" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CONFLICTS$GIT_CONFLICTS${C}"
+      fi
+      if [ "$GIT_CHANGED" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CHANGED$GIT_CHANGED${C}"
+      fi
+      if [ "$GIT_UNTRACKED" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED$GIT_UNTRACKED${C}"
+      fi
+      if [ "$GIT_STASHED" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STASHED$GIT_STASHED${C}"
+      fi
+      if [ "$GIT_CLEAN" -eq "1" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CLEAN"
+      fi
+      STATUS="$STATUS${C}$ZSH_THEME_GIT_PROMPT_SUFFIX"
+      echo "$STATUS"
+    fi
+}
+
+function status_in_dir() {
+    local sdir=$1
+    # This code is mostly copied from 
+    # ~/.oh-my-zsh/plugins/git-prompt/git-prompt.plugin.zsh
+    pushd . 2>&1 > /dev/null
+    cd ${sdir}
+    FOLDER=$(basename $(pwd))
+    _GIT_STATUS=$(python3 ~/.oh-my-zsh/plugins/git-prompt/gitstatus.py 2>/dev/null)
+    popd 2>&1 > /dev/null
+
+    [ -z "${_GIT_STATUS}" ] && exit 0 # Not in a git repository
+
+    __CURRENT_GIT_STATUS=("${(@s: :)_GIT_STATUS}")
+    GIT_BRANCH=$__CURRENT_GIT_STATUS[1]
+    GIT_AHEAD=$__CURRENT_GIT_STATUS[2]
+    GIT_BEHIND=$__CURRENT_GIT_STATUS[3]
+    GIT_STAGED=$__CURRENT_GIT_STATUS[4]
+    GIT_CONFLICTS=$__CURRENT_GIT_STATUS[5]
+    GIT_CHANGED=$__CURRENT_GIT_STATUS[6]
+    GIT_UNTRACKED=$__CURRENT_GIT_STATUS[7]
+    GIT_STASHED=$__CURRENT_GIT_STATUS[8]
+    GIT_CLEAN=$__CURRENT_GIT_STATUS[9]
+
+    ZSH_THEME_GIT_PROMPT_PREFIX="("
+    ZSH_THEME_GIT_PROMPT_SUFFIX=")"
+    ZSH_THEME_GIT_PROMPT_SEPARATOR="|"
+    ZSH_THEME_GIT_PROMPT_BRANCH="${im}"
+    ZSH_THEME_GIT_PROMPT_STAGED="${r}●"
+    ZSH_THEME_GIT_PROMPT_CONFLICTS="${r}✖"
+    ZSH_THEME_GIT_PROMPT_CHANGED="${b}✚"
+    ZSH_THEME_GIT_PROMPT_BEHIND="${ic}↓"
+    ZSH_THEME_GIT_PROMPT_AHEAD="${ir}↑"
+    ZSH_THEME_GIT_PROMPT_UNTRACKED="${c}…"
+    ZSH_THEME_GIT_PROMPT_STASHED="${ib}⚑"
+    ZSH_THEME_GIT_PROMPT_CLEAN="${ig}✔"
+
+    echo $(git_super_status)
+}
+
+function length() {
+    echo -n "${#${1}}"
+}
+
+if [ ! -z "${FETCH}" ]; then
+    for DIR in $*; do
+        pushd . 2>&1 > /dev/null
+        cd ${DIR}
+        git fetch 2>&1 > /dev/null
+        popd 2>&1 > /dev/null
+    done
+fi
+
+typeset -a FOLDERS
+FOLDERS=()
+typeset -a S_PREFIXES
+S_PREFIXES=()
+typeset -a STATUSES
+STATUSES=()
+MAX_FOLDER=0
+MAX_S_PREFIX=0
+for DIR in $*; do
+    set_colors
+    STATUS=$(status_in_dir ${DIR}) # Annotated with color codes
+    STATUSES+=(${STATUS})
+    set_colors "unset"
+    NOCOLOR=$(status_in_dir ${DIR}) # No color codes, makes length calculations easier
+    S_PREFIX=$(echo ${NOCOLOR} | sed 's/|.*//')
+    S_PREFIXES+=(${S_PREFIX})
+    if [ "$(length ${S_PREFIX})" -gt "${MAX_S_PREFIX}" ]; then
+      MAX_S_PREFIX="$(length ${S_PREFIX})"
+    fi
+    pushd . 2>&1 > /dev/null
+    cd ${DIR}
+    FOLDER=$(basename $(pwd))
+    popd 2>&1 > /dev/null
+    FOLDERS+=("${FOLDER}")
+    if [ "$(length ${FOLDER})" -gt "${MAX_FOLDER}" ]; then
+      MAX_FOLDER="$(length ${FOLDER})"
+    fi
+done
+set_colors
+WIDTH_TO_PIPE=$((${MAX_FOLDER} + 1 + 1 + 1 + ${MAX_S_PREFIX}))
+for i in {1..$#FOLDERS};
+do
+    FOLDER=$FOLDERS[i]
+    STATUS=$STATUSES[i]
+    S_PREFIX=$S_PREFIXES[i]
+    NUM_DOTS=$(( ${WIDTH_TO_PIPE} - $(length ${FOLDER}) - 1 - 1 - $(length ${S_PREFIX}) ))
+    DOTS=$(printf '%0.1s' "."{1..${NUM_DOTS}})
+ echo "${FOLDER} ${iK}${DOTS}${C} ${STATUS}"
+done
