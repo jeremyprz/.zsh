@@ -3,6 +3,7 @@
 # See: https://en.wikipedia.org/wiki/List_of_Unicode_characters
 sun=☉
 earth=♁
+alearth=🜃
 ground=⏚
 cloud=☁
 atom=⚛
@@ -18,27 +19,21 @@ dccurrent=𝌂
 
 case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "jdp-laptop")
-        location=$star
+        location=$airplane
         ;;
     "jdp--pc")
         location=$ground
         ;;
-    "f45c89a3afa7") 
-        location=$airplane
-        ;;
-    "3c22fbd0010b")
-        location=$airplane
-        ;;
-    "c889f3bb323b")
-        location=$dccurrent
-        ;;
-    "unused-1")
+    "jdp-mac")
         location=$atom
         ;;
-    "dev-dsk-przasnys-2b-0758ae36") 
+    "unused-1")
+        location=$dccurrent
+        ;;
+    "unused-2") 
         location=$cloud
         ;;
-    "newman")
+    "unused-3")
         location=$diamonds
         ;;
     "proto")
@@ -47,16 +42,16 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "capture")
         location=$flag
         ;;
-    "kramer"|"barb")
+    "unused-4")
         location=$earth
         ;;
-    "hackintosh") 
+    "unused-6") 
         location=$neptune
         ;;
-    "soupnazi") 
+    "unused-7") 
         location=$heart
         ;;
-    "SEA-9901942132")
+    "unused-8")
         location=$node
 	;;
     *)
