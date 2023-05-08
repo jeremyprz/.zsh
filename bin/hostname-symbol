@@ -25,7 +25,7 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
         location=$ground
         ;;
     "jdp-mac")
-        location=$atom
+        location=$alearth
         ;;
     "unused-1")
         location=$dccurrent
