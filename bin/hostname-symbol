@@ -21,7 +21,7 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "jdp-laptop")
         location=$airplane
         ;;
-    "jdp--pc")
+    "jdp-pc")
         location=$ground
         ;;
     "jdp-mac")
