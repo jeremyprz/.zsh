@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 export PATH=${PATH}:~/.zsh/bin
-umask 022
+umask 0002
 
 # https://stackoverflow.com/questions/62931101/i-have-multiple-files-of-zcompdump-why-do-i-have-multiple-files-of-these
 export ZSH_COMPDUMP="~/.zsh/.cache/.zcompdump-${HOST}"
