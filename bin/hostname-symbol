@@ -3,6 +3,7 @@
 # See: https://en.wikipedia.org/wiki/List_of_Unicode_characters
 sun=☉
 earth=♁
+mars=♂
 alearth=🜃
 ground=⏚
 cloud=☁
@@ -24,6 +25,9 @@ case `hostname -s | tr '[:upper:]' '[:lower:]'` in
     "jdp-pc")
         location=$ground
         ;;
+    "baebeth")
+ 	location=$mars
+	;;
     "jdp-mac")
         location=$alearth
         ;;
