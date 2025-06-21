@@ -49,6 +49,7 @@ fi
 [ ! -d ~/bin ] && mkdir ~/bin
 PATH=~/bin:"${PATH}"
 [ -d ~/man ] && MANPATH=~/man:"${MANPATH}"
+[ -d /usr/local/opt/postgresql@17/bin ] && export PATH="/usr/local/opt/postgresql@17/bin:${PATH}"
 [ -d ~/dev/sandbox ] && cd ~/dev/sandbox
 [ -f ~/.env/init.zsh ] && source ~/.env/init.zsh
 [ -f ~/.zsh/.zsh-history ] && source ~/.zsh/.zsh-history
@@ -58,11 +59,13 @@ PATH=~/bin:"${PATH}"
 [ -d ~/dev/bin ] && PATH=~/dev/bin:${PATH}
 [ -d ~/.organl/bin ] && PATH=~/.organl/bin:${PATH}
 [ -d ~/Dropbox/family/divorce/bin ] && PATH=~/Dropbox/family/divorce/bin:${PATH}
+[ -d ~/dev/olai/olai ] && source ~/dev/olai/venv/olai/bin/activate
 
 # log4j JNDI fixes
 export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
 
 export DISABLE_AUTO_UPDATE="true"
+export VIRTUAL_ENV_DISABLE_PROMPT="true"
 
 [ ! -f ~/.oh-my-zsh/custom/themes/organl.zsh-theme ] && ~/.zsh/init/install-organl-zsh-theme
 
