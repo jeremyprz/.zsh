@@ -44,6 +44,15 @@ if [ -d /opt/gradle ]; then
     [ -f /bin/launchctl ] && /bin/launchctl setenv GRADLE_HOME ${GRADLE_HOME}
 fi
 
+fexists() {
+    target=$1
+    if [[ -f $target || ( -L $target && -f $(readlink -f $target ) ) ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 [ -d /sbin ] && PATH=/sbin:${PATH}
 [ -d /snap/bin ] && PATH=/snap/bin:${PATH}
 [ ! -d ~/bin ] && mkdir ~/bin
@@ -60,6 +69,7 @@ PATH=~/bin:"${PATH}"
 [ -d ~/.organl/bin ] && PATH=~/.organl/bin:${PATH}
 [ -d ~/Dropbox/family/divorce/bin ] && PATH=~/Dropbox/family/divorce/bin:${PATH}
 [ -d ~/dev/olai/olai ] && source ~/dev/olai/venv/olai/bin/activate
+fexists ~/.gemini/.env && source ~/.gemini/.env
 
 # log4j JNDI fixes
 export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
