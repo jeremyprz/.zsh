@@ -66,10 +66,16 @@ PATH=~/bin:"${PATH}"
 [ -d ~/.toolbox/bin ] && PATH=~/.toolbox/bin:${PATH}
 [ -d ~/.local/bin ] && PATH=~/.local/bin:${PATH}
 [ -d ~/dev/bin ] && PATH=~/dev/bin:${PATH}
+if [[ -d ~/.pyenv ]]; then
+    export PY_ENV_ROOT="~/.pyenv"
+    export PATH="${PY_ENV_ROOT}/bin:$PATH"
+    eval "$(pyenv init --path)"
+fi
 [ -d ~/.organl/bin ] && PATH=~/.organl/bin:${PATH}
-[ -d ~/Dropbox/family/divorce/bin ] && PATH=~/Dropbox/family/divorce/bin:${PATH}
-[ -d ~/dev/olai/olai ] && source ~/dev/olai/venv/olai/bin/activate
+[ -d ~/Dropbox/divorce/bin ] && PATH=~/Dropbox/divorce/bin:${PATH}
+fexists ~/dev/olai/venv/olai/bin/activate && source ~/dev/olai/venv/olai/bin/activate
 fexists ~/.gemini/.env && source ~/.gemini/.env
+
 
 # log4j JNDI fixes
 export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
@@ -102,3 +108,15 @@ autoload -Uz compinit && compinit -i
 if [ -f "$(which aws_completer)" ]; then
   complete -C "$(which aws_completer)" aws
 fi
+
+# The next line updates PATH for the Google Cloud SDK.
+fexists /private/tmp/google-cloud-sdk/path.zsh.inc && . /private/tmp/google-cloud-sdk/path.zsh.inc
+
+# The next line enables shell command completion for gcloud.
+fexists /private/tmp/google-cloud-sdk/completion.zsh.inc && . /private/tmp/google-cloud-sdk/completion.zsh.inc
+
+# Google Cloud SDK
+export GOOGLE_CLOUD_PROJECT="olai-prototype"
+
+# opencode
+[ -d ~/.opencode/bin ] && PATH=~/.opencode/bin:$PATH
