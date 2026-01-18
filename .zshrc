@@ -66,6 +66,7 @@ PATH=~/bin:"${PATH}"
 [ -d ~/.toolbox/bin ] && PATH=~/.toolbox/bin:${PATH}
 [ -d ~/.local/bin ] && PATH=~/.local/bin:${PATH}
 [ -d ~/dev/bin ] && PATH=~/dev/bin:${PATH}
+[ -d /usr/games ] && PATH=${PATH}:/usr/games
 if [[ -d ~/.pyenv ]]; then
     export PY_ENV_ROOT="~/.pyenv"
     export PATH="${PY_ENV_ROOT}/bin:$PATH"
